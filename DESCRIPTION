@@ -1,0 +1,27 @@
+Package: oliveRconnect
+Title: Connection Framework for the Oliver API
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Joe",
+           family = "Mienko",
+           role = c("aut", "cre"),
+           email = "mienko@uw.edu")
+Description: A bare bones set of functions for connecting to the API underlying the Oliver 
+    service management platform (www.oliverservices.org).
+License: MIT + file LICENSE
+URL: http://www.google.com
+BugReports: https://www.google.com
+Depends:
+    R (>= 3.0.0)
+    ,tidyr
+Imports: 
+    dplyr, 
+    httr, 
+    purrr
+Suggests: 
+    knitr (>= 1.19)
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: yes
+Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace", "collate"))
+RoxygenNote: 6.1.1
