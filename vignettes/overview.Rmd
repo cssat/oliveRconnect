@@ -1,5 +1,7 @@
 ---
 title: "Getting Data From the Oliver API"
+author: "Joe Mienko"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Data From the Oliver API}
@@ -67,19 +69,21 @@ Once a user has been authenticated, you can also parse JSON directly from the AP
 
 ```{r, eval = FALSE}
 get_org_info(c(1, 185))
-
-# > Partners for Our Children Grassroots Therapy Group. LLC 
-# >                        1                           185 
 ```
+
+> Partners for Our Children Grassroots Therapy Group. LLC 
+
+>                        1                           185 
 
 If the user does not have access, the function will return as much informatoin as is available. 
 
 ```{r, eval = FALSE}
-get_org_info(c(1, 185))
-
-# > Partners for Our Children         Org Not Available 
-# >                        1                        NA                         
+get_org_info(c(1, 1000))
 ```
+
+> Partners for Our Children         Org Not Available 
+
+>                        1                        NA         
 
 ## Putting it Together
 
@@ -192,7 +196,8 @@ server <- function(input, output, session) {
                       ,hours_to_fftf = lubridate::as.duration(hours_to_fftf)
                       ,hours_to_fc = lubridate::as.duration(hours_to_fc)
         ) %>%  
-        dplyr::select(oliver_referral_id, hours_to_fc, hours_to_fftf, initial_contact_observed, first_ftf_observed
+        dplyr::select(oliver_referral_id, hours_to_fc, hours_to_fftf
+                      ,initial_contact_observed, first_ftf_observed
                       ,org_id) 
     } 
     })
@@ -245,7 +250,8 @@ server <- function(input, output, session) {
                        ,fftf = fit_fftf)
       survminer::surv_median(fit = fit_list
                              ,combine = TRUE) %>%
-        dplyr::mutate(median = lubridate::duration(num = median, units = "second")/lubridate::dhours(1)
+        dplyr::mutate(median = lubridate::duration(num = median
+                                                   ,units = "second")/lubridate::dhours(1)
                       ,strata = readr::parse_number(strata)) 
       
       } else {
@@ -265,10 +271,15 @@ server <- function(input, output, session) {
                ,title = list(text = 'Measurement')) %>%
       hc_yAxis(title = list(text = 'Median Hours to Event')) %>%
       hc_plotOptions(series = list(dataLabels = list(enabled = TRUE))) %>%
-      hc_add_series(data = c(round(filter(km_medians(), strata == input$provider_select, id == "fc") %>% .$median, 2),
-                             round(filter(km_medians(), strata == input$provider_select, id == "fftf") %>% .$median, 2))) %>%
-      hc_title(text = paste0('Provider Stats for ', names(provider_labels[provider_labels == input$provider_select])),
-               align = 'left') %>%
+      hc_add_series(data = c(round(filter(km_medians()
+                                          ,strata == input$provider_select, id == "fc") 
+                                   %>% .$median, 2),
+                             round(filter(km_medians()
+                                          ,strata == input$provider_select, id == "fftf") 
+                                   %>% .$median, 2))) %>%
+      hc_title(text = paste0('Provider Stats for '
+                             ,names(provider_labels[provider_labels == input$provider_select]))
+               ,align = 'left') %>%
       hc_add_theme(hc_theme_gridlight()) %>%
       hc_colors(c('#d01010', '#d01010')) %>%
       hc_tooltip(enabled = FALSE)
