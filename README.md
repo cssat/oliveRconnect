@@ -32,7 +32,7 @@ In order to access the Oliver API, you will need to have an active Oliver accoun
 
 ## Authentication 
 
-The code chunk shows how to access pass these variables to `post_auth_to_oliver()`. If successful, this function will return the message `oliver API authentication established`. This tells you that you have connected to Oliver and stored session cookies within your R environment. 
+The code chunk shows how to pass these parameters to `post_auth_to_oliver()`. If successful, this function will return the message `oliver API authentication established`. This tells you that you have connected to Oliver and stored session cookies within your Global R environment. 
 
 
 ```r
@@ -52,7 +52,7 @@ The following two functions return data from the Oliver API.
 oliveRconnect::get_csv_extract(extract_name = "fss_raw.csv")
 ```
 
-Other options for the `extract_name` parameter within `get_csv_extract()` include notes_extract.csv, grassroots_diff.csv, and grassroots_diff.csv.
+Other options for the `extract_name` parameter within `get_csv_extract()` include `notes_extract.csv`, `notes_extract.csv`, and `grassroots_diff.csv`.
 
 ### Parsed JSON Directly from the API
 
@@ -67,7 +67,7 @@ get_org_info(c(1, 185))
 
 >                        1                           185 
 
-If the user does not have access, the function will return as much informatoin as is available. 
+If the user does not have access, the function will return as much information as is available. 
 
 
 ```r
@@ -80,7 +80,7 @@ get_org_info(c(1, 1000))
 
 ## Putting it Together
 
-These individual functons can also be combined with Shiny to produce a visualization of our some basic Quality Assurance statistics within the Combined In-Home Services Domain. 
+These individual functions can also be combined with Shiny to produce a visualization of some basic Quality Assurance statistics within the Combined In-Home Services domain. 
 
 
 ```r
