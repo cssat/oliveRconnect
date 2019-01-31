@@ -2,11 +2,8 @@
 title: "Getting Data From the Oliver API"
 author: "Joe Mienko"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Getting Data From the Oliver API}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+output: html_document
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}

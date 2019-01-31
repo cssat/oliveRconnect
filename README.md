@@ -1,17 +1,12 @@
 ---
 title: "Getting Data From the Oliver API"
 author: "Joe Mienko"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Getting Data From the Oliver API}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+output: 
+  html_document:
+    keep_md: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## Overview
 
@@ -31,7 +26,8 @@ olverRconnect is a package providing a set of functions that help you connect to
 
 ## Installation
 
-```{r, eval = FALSE}
+
+```r
 # install.packages("devtools")
 devtools::install_github("cssat/oliveRconnect")
 ```
@@ -44,11 +40,11 @@ In order to access the Oliver API, you will need to have an active Oliver accoun
 
 The code chunk shows how to access pass these variables to `post_auth_to_oliver()`. If successful, this function will return the message `oliver API authentication established`. This tells you that you have connected to Oliver and stored session cookies within your R environment. 
 
-```{r, eval = FALSE}
+
+```r
 oliveRconnect::post_auth_to_oliver(oliver_email = Sys.getenv("OLIVER_ID")
                                    ,oliver_password = Sys.getenv("OLIVER_PW")
                                    ,oliver_env = "production")
-
 ```
 
 ## Getting Data
@@ -57,7 +53,8 @@ The following two functions return data from the Oliver API.
 
 ### CSV Result from Replica Database
 
-```{r, eval = FALSE}
+
+```r
 oliveRconnect::get_csv_extract(extract_name = "fss_raw.csv")
 ```
 
@@ -67,7 +64,8 @@ Other options for the `extract_name` parameter within `get_csv_extract()` includ
 
 Once a user has been authenticated, you can also parse JSON directly from the API. An example function for doing so is `get_org_info()`. This function expects an integer vector of organization IDs. If the user has access to all of the organization IDs, the function will return a named vector of those IDs. 
 
-```{r, eval = FALSE}
+
+```r
 get_org_info(c(1, 185))
 ```
 
@@ -77,7 +75,8 @@ get_org_info(c(1, 185))
 
 If the user does not have access, the function will return as much informatoin as is available. 
 
-```{r, eval = FALSE}
+
+```r
 get_org_info(c(1, 1000))
 ```
 
@@ -89,8 +88,8 @@ get_org_info(c(1, 1000))
 
 These individual functons can also be combined with Shiny to produce a visualization of our some basic Quality Assurance statistics within the Combined In-Home Services Domain. 
 
-```{r, eval = FALSE}
 
+```r
 library(shiny)
 library(oliveRconnect)
 library(dplyr)
