@@ -7,8 +7,10 @@
 get_csv_extract(extract_name = NA)
 }
 \arguments{
-\item{extract_name}{A valid extract name available to the specified user}
+\item{extract_name}{A valid extract name available to the specified user.}
 }
 \description{
-GET Oliver csv extracts via authentication object
+This is a function that will pull a specified PPM extract from the Oliver API
+for authorized users. The \code{extract_name} parameter must be either
+\code{fss_raw.csv}, \code{fss_extract.csv}, \code{notes_extract.csv}, or \code{grassroots_diff.csv}.
 }
