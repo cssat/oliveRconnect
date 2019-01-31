@@ -1,5 +1,11 @@
-# Getting Data From the Oliver API
-## Joe Mienko
+---
+title: "Getting Data From the Oliver API"
+author: "Joe Mienko"
+output: 
+  html_document:
+    keep_md: true
+---
+
 
 
 ## Overview

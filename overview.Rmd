@@ -1,8 +1,8 @@
 ---
 title: "Getting Data From the Oliver API"
 author: "Joe Mienko"
-date: "`r Sys.Date()`"
-output: html_document
+output: 
+  html_document:
     keep_md: true
 ---
 
@@ -91,29 +91,33 @@ These individual functons can also be combined with Shiny to produce a visualiza
 library(shiny)
 library(oliveRconnect)
 library(dplyr)
+library(quantmod)
+library(xts)
+library(TTR)
 library(highcharter)
+library(survminer)
 
 # Define UI for application that draws a barchart
 ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Family Support Services Timeliness Stats"),
-   
-   # Sidebar with a select input for provider
-   sidebarLayout(
-      sidebarPanel(
-        selectizeInput(inputId = "provider_select"
-                       ,label = "Provider"
-                       ,choices = NULL
-                       ,multiple = FALSE)
-      ),
+  
+  # Application title
+  titlePanel("Family Support Services Timeliness Stats"),
+  
+  # Sidebar with a select input for provider
+  sidebarLayout(
+    sidebarPanel(
+      selectizeInput(inputId = "provider_select"
+                     ,label = "Provider"
+                     ,choices = NULL
+                     ,multiple = FALSE)
+    ),
+    
+    # Show a plot of the generated distribution
+    mainPanel(
+      highchartOutput('metricplot')
       
-      # Show a plot of the generated distribution
-      mainPanel(
-        highchartOutput('metricplot')
-        
-      )
-   )
+    )
+  )
 )
 
 # Define server logic required to draw a histogram
@@ -173,7 +177,7 @@ server <- function(input, output, session) {
   
   fss_raw <- reactive({
     if (values$authenticated) {
-      dat_raw_timing <- get_csv_extract("fss_raw.csv") %>%
+      get_csv_extract("fss_raw.csv") %>%
         dplyr::filter(!is.na(service_confirmation)) %>%
         dplyr::mutate(initial_contact_observed = ifelse(is.na(initial_contact), 0, 1)
                       ,first_ftf_observed = ifelse(is.na(first_face_to_face), 0, 1)
@@ -197,7 +201,7 @@ server <- function(input, output, session) {
                       ,initial_contact_observed, first_ftf_observed
                       ,org_id) 
     } 
-    })
+  })
   
   org_list <- reactive({
     
@@ -226,17 +230,11 @@ server <- function(input, output, session) {
     
   })
   
-      
+  
   km_medians <- reactive({
     
     if (values$authenticated) {
-    
-      fit_fc <- survival::survfit(survival::Surv(time = hours_to_fc
-                                                 ,event = initial_contact_observed) ~ org_id
-                                  ,data = dat_raw_timing)
-      fit_fftf <- survival::survfit(survival::Surv(time = hours_to_fftf
-                                                   ,event = first_ftf_observed) ~ org_id
-                                    ,data = dat_raw_timing)
+
       fit_fc <- survival::survfit(survival::Surv(time = hours_to_fc
                                                  ,event = initial_contact_observed) ~ org_id, 
                                   data = fss_raw())
@@ -251,12 +249,12 @@ server <- function(input, output, session) {
                                                    ,units = "second")/lubridate::dhours(1)
                       ,strata = readr::parse_number(strata)) 
       
-      } else {
-        
+    } else {
+      
       dplyr::data_frame(strata = 1, median = 0, id = c("fc", "fftf"))
-          
-      }
-
+      
+    }
+    
   })
   
   output$metricplot <- renderHighchart({
@@ -274,19 +272,17 @@ server <- function(input, output, session) {
                              round(filter(km_medians()
                                           ,strata == input$provider_select, id == "fftf") 
                                    %>% .$median, 2))) %>%
-      hc_title(text = paste0('Provider Stats for '
-                             ,names(provider_labels[provider_labels == input$provider_select]))
-               ,align = 'left') %>%
       hc_add_theme(hc_theme_gridlight()) %>%
       hc_colors(c('#d01010', '#d01010')) %>%
       hc_tooltip(enabled = FALSE)
     
   })
-
+  
   
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
 ```
 
