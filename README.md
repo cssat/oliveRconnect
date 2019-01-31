@@ -4,7 +4,7 @@
 
 ## Overview
 
-olverRconnect is a package providing a set of functions that help you connect to the Oliver api undergirding the Oliver service management solution (www.oliverservices.org). 
+`oliveRconnect` is a package providing a set of functions that help you connect to the Oliver api undergirding the Oliver service management solution [www.oliverservices.org](www.oliverservices.org). 
 
 ### Authentication Helper Functions 
 
