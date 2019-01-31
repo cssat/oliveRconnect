@@ -52,11 +52,7 @@ The following two functions return data from the Oliver API.
 oliveRconnect::get_csv_extract(extract_name = "fss_raw.csv")
 ```
 
-<<<<<<< HEAD
 Other options for the `extract_name` parameter within `get_csv_extract()` include `fss_extract.csv`, `notes_extract.csv`, and `grassroots_diff.csv`.
-=======
-Other options for the `extract_name` parameter within `get_csv_extract()` include `notes_extract.csv`, `notes_extract.csv`, and `grassroots_diff.csv`.
->>>>>>> 562505092625c9ae0fb73bdb3d1d8fc7a0e0b189
 
 ### Parsed JSON Directly from the API
 
